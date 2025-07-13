@@ -46,7 +46,7 @@
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-api-key": "eyJpIjoib25zbXNxamMiLCJoIjoiY2FwaWcuc3RhcGUubnoiLCJrIjoiMGRjNmEyMGUyZWM4MjYzMTJkMzUwOWUwNDBiZDExYjg2Mjc5MjM5NG9uc21zcWpjIn0="
+          "x-api-key": "ضع_الـ_API_KEY_الخاص_بك_هنا"
         },
         body: JSON.stringify({
           data: [event],
@@ -57,7 +57,8 @@
       if (response.ok) {
         alert("✅ تم إرسال الطلب بنجاح!");
       } else {
-        alert("❌ فشل في إرسال الطلب، يرجى المحاولة لاحقاً.");
+        const errorText = await response.text();
+        alert("❌ فشل في إرسال الطلب:\n" + errorText);
       }
     }
   </script>
