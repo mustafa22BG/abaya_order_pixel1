@@ -1,63 +1,61 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-    <meta charset="UTF-8">
-    <title>نموذج الطلب - عبايات</title>
-    <script>
-        async function sendPurchaseEvent(e) {
-            e.preventDefault();
-            const name = document.getElementById("name").value;
-            const phone = document.getElementById("phone").value;
-            const amount = document.getElementById("amount").value;
+  <meta charset="UTF-8">
+  <title>نموذج طلب عباية</title>
+  <script>
+    async function sendPurchaseEvent(e) {
+      e.preventDefault();
 
-            const event = {
-                event_name: "Purchase",
-                event_time: Math.floor(Date.now() / 1000),
-                action_source: "website",
-                event_source_url: window.location.href,
-                user_data: {
-                    ph: phone.startsWith("+964") ? phone : "+964" + phone.slice(1)
-                },
-                custom_data: {
-                    currency: "IQD",
-                    value: amount
-                }
-            };
+      const name = document.getElementById("name").value;
+      const phone = document.getElementById("phone").value;
+      const amount = document.getElementById("amount").value;
 
-            const response = await fetch("https://capig.stape.nz", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "x-api-key": "eyJpIjoib25zbXNxamMiLCJoIjoiY2FwaWcuc3RhcGUubnoiLCJrIjoiMGRjNmEyMGUyZWM4MjYzMTJkMzUwOWUwNDBiZDExYjg2Mjc5MjM5NG9uc21zcWpjIn0="
-                },
-                body: JSON.stringify({
-                    pixel_id: "1100587278023096",
-                    events: [event],
-                    test_event_code: ""
-                })
-            });
-
-            if (response.ok) {
-                alert("✅ تم إرسال الطلب وتسجيله في Facebook Pixel.");
-            } else {
-                alert("❌ فشل في إرسال الطلب. تحقق من البيانات أو المفتاح.");
-            }
+      const event = {
+        event_name: "Purchase",
+        event_time: Math.floor(Date.now() / 1000),
+        action_source: "website",
+        event_source_url: window.location.href,
+        user_data: {
+          ph: phone.startsWith("00964") ? phone.slice(2) : phone
+        },
+        custom_data: {
+          value: amount,
+          currency: "IQD",
+          content_name: "طلب عباية"
         }
-    </script>
+      };
+
+      const response = await fetch("https://capig.stape.nz", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": "هنا_تحط_مفتاح_API_من_Stape"  <!-- غيّر هذا فقط -->
+        },
+        body: JSON.stringify({
+          pixel_id: "1100587278023096",
+          events: [event]
+        })
+      });
+
+      const result = await response.text();
+      alert("تم إرسال الطلب بنجاح ✅");
+    }
+  </script>
 </head>
-<body style="direction: rtl; font-family: sans-serif; padding: 20px;">
-    <h2>نموذج طلب عباية</h2>
-    <form onsubmit="sendPurchaseEvent(event)">
-        <label>الاسم الكامل:</label><br>
-        <input type="text" id="name" required><br><br>
+<body>
+  <h2>نموذج طلب عباية</h2>
+  <form onsubmit="sendPurchaseEvent(event)">
+    <label for="name">الاسم الكامل:</label><br>
+    <input type="text" id="name" required><br><br>
 
-        <label>رقم الهاتف:</label><br>
-        <input type="text" id="phone" required><br><br>
+    <label for="phone">رقم الهاتف:</label><br>
+    <input type="text" id="phone" required><br><br>
 
-        <label>قيمة الطلب (بالدينار العراقي):</label><br>
-        <input type="number" id="amount" required><br><br>
+    <label for="amount">قيمة الطلب (بالدينار العراقي):</label><br>
+    <input type="text" id="amount" required><br><br>
 
-        <button type="submit">تأكيد الطلب</button>
-    </form>
+    <button type="submit">تأكيد الطلب</button>
+  </form>
 </body>
 </html>
