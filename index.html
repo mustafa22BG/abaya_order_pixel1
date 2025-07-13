@@ -4,15 +4,18 @@
   <meta charset="UTF-8" />
   <title>نموذج طلب عباية</title>
 </head>
-<body>
+<body style="direction: rtl; font-family: sans-serif; padding: 20px;">
   <h2>نموذج طلب عباية</h2>
   <form onsubmit="sendPurchaseEvent(event)">
     <label>الاسم الكامل:</label><br />
-    <input type="text" id="name" required /><br />
+    <input type="text" id="name" required /><br /><br />
+
     <label>رقم الهاتف:</label><br />
-    <input type="text" id="phone" required /><br />
+    <input type="text" id="phone" required /><br /><br />
+
     <label>قيمة الطلب (بالدينار العراقي):</label><br />
     <input type="number" id="amount" required /><br /><br />
+
     <button type="submit">تأكيد الطلب</button>
   </form>
 
@@ -20,9 +23,13 @@
     async function sendPurchaseEvent(e) {
       e.preventDefault();
 
+      alert("زر تأكيد الطلب اشتغل ✅");
+
       const name = document.getElementById("name").value;
       const phone = document.getElementById("phone").value;
       const amount = document.getElementById("amount").value;
+
+      const normalizedPhone = phone.startsWith("00964") ? phone.slice(2) : phone;
 
       const event = {
         event_name: "Purchase",
@@ -30,7 +37,7 @@
         action_source: "website",
         event_source_url: window.location.href,
         user_data: {
-          ph: phone.startsWith("00964") ? phone.slice(2) : phone
+          ph: normalizedPhone
         },
         custom_data: {
           value: amount,
@@ -47,15 +54,15 @@
         },
         body: JSON.stringify({
           data: [event],
-          test_event_code: "",
-          pixel_id: "1100587278023096"
+          pixel_id: "1100587278023096",
+          test_event_code: ""
         })
       });
 
       if (response.ok) {
-        alert("تم إرسال الطلب بنجاح!");
+        alert("✅ تم إرسال الطلب وتسجيله في Facebook Pixel.");
       } else {
-        alert("فشل في إرسال الطلب، يرجى المحاولة لاحقاً.");
+        alert("❌ فشل في إرسال الطلب. تحقق من المفتاح أو البيانات.");
       }
     }
   </script>
