@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar">
 <head>
@@ -11,14 +10,13 @@
             const phone = document.getElementById("phone").value;
             const amount = document.getElementById("amount").value;
 
-            // بيانات الحدث
             const event = {
                 event_name: "Purchase",
                 event_time: Math.floor(Date.now() / 1000),
                 action_source: "website",
                 event_source_url: window.location.href,
                 user_data: {
-                    ph: phone
+                    ph: phone.startsWith("+964") ? phone : "+964" + phone.slice(1)
                 },
                 custom_data: {
                     currency: "IQD",
@@ -26,12 +24,11 @@
                 }
             };
 
-            // إرسال الحدث عبر Stape CAPI Gateway
             const response = await fetch("https://capig.stape.nz", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "x-api-key": "eyJpIjoib25zbXNnamMiLCJ...WpjIn0=" // (تم تقصيره هنا للحماية)
+                    "x-api-key": "eyJpIjoib25zbXNxamMiLCJoIjoiY2FwaWcuc3RhcGUubnoiLCJrIjoiMGRjNmEyMGUyZWM4MjYzMTJkMzUwOWUwNDBiZDExYjg2Mjc5MjM5NG9uc21zcWpjIn0="
                 },
                 body: JSON.stringify({
                     pixel_id: "1100587278023096",
@@ -41,9 +38,9 @@
             });
 
             if (response.ok) {
-                alert("تم إرسال الطلب وتسجيله في Facebook Pixel.");
+                alert("✅ تم إرسال الطلب وتسجيله في Facebook Pixel.");
             } else {
-                alert("فشل في إرسال الطلب. حاول مجددًا.");
+                alert("❌ فشل في إرسال الطلب. تحقق من البيانات أو المفتاح.");
             }
         }
     </script>
